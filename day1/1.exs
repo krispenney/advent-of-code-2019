@@ -1,6 +1,7 @@
 defmodule Solution do
   defp parse_file(body) do
     body
+    |> String.trim_trailing
     |> String.split("\n")
     |> Enum.map(&String.to_integer/1)
   end

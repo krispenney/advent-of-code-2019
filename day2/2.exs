@@ -1,4 +1,9 @@
 defmodule Solution do
+  @input File.read!('in') 
+  |> String.trim_trailing
+  |> String.split(",")
+  |> Enum.map(&String.to_integer/1)
+
   defp arg(memory, offset) do
     addr = Enum.at(memory, offset)
     Enum.at(memory, addr)
@@ -30,25 +35,21 @@ defmodule Solution do
     memory
   end
 
-  defp setup_program(program, noun, verb) do
-    program = List.replace_at(program, 1, noun)
-    program = List.replace_at(program, 2, verb)
+  def solve do
+    { _memory, noun, verb } =
+      for noun <- 0..99, verb <- 0..99 do
+        memory = @input
+                 |> List.replace_at(1, noun)
+                 |> List.replace_at(2, verb)
+                 |> execute(0)
+        { memory, noun, verb }
+      end
+      |> Enum.find(fn { memory, _n, _v } ->
+        (memory |> hd) == 19690720
+      end)
 
-    { execute(program, 0), noun, verb }
-  end
-
-  def solve(program) do
-    program_results = for noun <- 0..99, verb <- 0..99, do: setup_program(program, noun, verb)
-    # IO.inspect(program_results)
-    
-    [ { _memory, noun, verb } ] = Enum.filter(program_results, fn { result, _noun, _verb } -> Enum.at(result, 0) == 19690720 end)
     (100 * noun) + verb
   end
 end
 
-File.read!('in') 
-|> String.trim_trailing
-|> String.split(",")
-|> Enum.map(&String.to_integer/1)
-|> Solution.solve
-|> IO.inspect
+Solution.solve |> IO.inspect
