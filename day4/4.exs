@@ -46,7 +46,9 @@ test_cases = [
 
 test_cases
 |> Enum.map(fn { expected, test } ->
-  actual = Solution.valid_password?(Solution.int_to_list(test))
+  actual = test
+           |> Integer.digits
+           |> Solution.valid_password?
 
   case expected == actual do
     false -> 
