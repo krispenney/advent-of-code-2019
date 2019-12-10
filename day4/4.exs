@@ -31,9 +31,9 @@ defmodule Solution do
 
   def solve do
     @password_range
-    |> Enum.map(&Integer.digits/1)
-    |> Enum.filter(&(valid_password?(&1)))
-    |> length
+    |> Stream.map(&Integer.digits/1)
+    |> Stream.filter(&(valid_password?(&1)))
+    |> Enum.count
   end
 end
 
@@ -45,7 +45,7 @@ test_cases = [
 ]
 
 test_cases
-|> Enum.map(fn { expected, test } ->
+|> Enum.each(fn { expected, test } ->
   actual = test
            |> Integer.digits
            |> Solution.valid_password?
