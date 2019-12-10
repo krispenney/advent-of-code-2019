@@ -29,15 +29,9 @@ defmodule Solution do
     Enum.all?(conditions, &(&1.(candidate)))
   end
 
-  def int_to_list(candidate), do: int_to_list(candidate, [])
-  def int_to_list(0, acc), do: acc
-  def int_to_list(candidate, acc) do
-    int_to_list(div(candidate, 10), [ rem(candidate, 10) | acc ])
-  end
-
   def solve do
     @password_range
-    |> Enum.map(&int_to_list/1)
+    |> Enum.map(&Integer.digits/1)
     |> Enum.filter(&(valid_password?(&1)))
     |> length
   end
