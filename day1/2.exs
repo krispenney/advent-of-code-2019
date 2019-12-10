@@ -3,7 +3,7 @@ defmodule Solution do
     body
     |> String.trim_trailing
     |> String.split("\n")
-    |> Enum.map(&String.to_integer/1)
+    |> Stream.map(&String.to_integer/1)
   end
 
   defp calculate_fuel(module_mass) do
@@ -21,13 +21,13 @@ defmodule Solution do
   def solve(file_body) do
     fuel_for_modules = file_body
                        |> parse_file
-                       |> Enum.map(&calculate_fuel/1)
+                       |> Stream.map(&calculate_fuel/1)
 
     fuel_for_fuel = fuel_for_modules
-                    |> Enum.map(&fuel_for_fuel_mass/1)
+                    |> Stream.map(&fuel_for_fuel_mass/1)
+                    |> Enum.reduce(&+/2)
 
-    total = fuel_for_modules ++ fuel_for_fuel
-            |> Enum.reduce(&+/2)
+    total = Enum.reduce(fuel_for_modules, &+/2) + fuel_for_fuel
 
     IO.inspect total
   end
